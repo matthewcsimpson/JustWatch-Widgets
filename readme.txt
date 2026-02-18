@@ -33,7 +33,7 @@ Tested language override options:
 - German
 - Italian
 - Polish
-- Portugese
+- Portuguese
 - Romanian
 - Russian
 - Spanish
@@ -65,7 +65,7 @@ On plugin uninstall (delete), plugin options are cleaned up from the database.
 2. JustWatch Widget block controls in the editor.
 3. Block options with overrides disabled
 4. Block options with overrides enabled
-5. The widget rendered serveal different times.  This does not represent all of the available customizations, just a taste of what's possible. 
+5. The widget rendered several different times. This does not represent all of the available customizations, just a taste of what's possible.
 
 == Changelog ==
 

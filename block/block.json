@@ -7,7 +7,7 @@
   "category": "embed",
   "icon": "video-alt3",
   "description": "Embed a JustWatch widget using TMDB or IMDB id.",
-  "textdomain": "jw-widgets",
+  "textdomain": "justwatch-widgets",
   "attributes": {
     "objectType": { "type": "string", "default": "movie" },
     "idType": { "type": "string", "default": "imdb" },
