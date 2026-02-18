@@ -78,10 +78,24 @@ Service documentation and policies:
 ## Screenshots
 
 1. Global plugin settings in wp-admin.
+
+![Global plugin settings in wp-admin](assets/screenshot-1.png)
+
 2. JustWatch Widget block controls in the editor.
+
+![JustWatch Widget block controls in the editor](assets/screenshot-2.png)
+
 3. Block options with overrides disabled.
+
+![Block options with overrides disabled](assets/screenshot-3.png)
+
 4. Block options with overrides enabled.
+
+![Block options with overrides enabled](assets/screenshot-4.png)
+
 5. The widget rendered several different times. This does not represent all of the available customizations, just a taste of what's possible.
+
+![Rendered widget examples](assets/screenshot-5.png)
 
 ## Project Structure
 
