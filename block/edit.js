@@ -31,6 +31,10 @@ const Edit = ({ attributes, setAttributes }) => {
     headingPosition: "inside",
     borderEnabled: true,
     borderColour: "#dcdcdc",
+    wrapperMarginTop: "0",
+    wrapperMarginRight: "0",
+    wrapperMarginBottom: "1rem",
+    wrapperMarginLeft: "0",
     textColourOverrideEnabled: false,
     textColour: "",
     noOffersMessage:
@@ -148,6 +152,11 @@ const Edit = ({ attributes, setAttributes }) => {
               overrideHeadingPosition: editorDefaults.headingPosition,
               overrideBorderEnabled: !!editorDefaults.borderEnabled,
               overrideBorderColour: editorDefaults.borderColour,
+              overrideWrapperMarginEnabled: false,
+              overrideWrapperMarginTop: editorDefaults.wrapperMarginTop,
+              overrideWrapperMarginRight: editorDefaults.wrapperMarginRight,
+              overrideWrapperMarginBottom: editorDefaults.wrapperMarginBottom,
+              overrideWrapperMarginLeft: editorDefaults.wrapperMarginLeft,
               overrideTextColourOverrideEnabled:
                 !!editorDefaults.textColourOverrideEnabled,
               overrideTextColour: editorDefaults.textColour,
@@ -164,7 +173,7 @@ const Edit = ({ attributes, setAttributes }) => {
       {overridesEnabled && (
         <>
           <SelectControl
-            label="Offer Label"
+            label="Offer Type"
             value={attributes.overrideOfferLabel || ""}
             options={[
               { label: "Use global default", value: "" },
@@ -290,6 +299,54 @@ const Edit = ({ attributes, setAttributes }) => {
                 setAttributes({ overrideBorderColour: value })
               }
             />
+          )}
+
+          <ToggleControl
+            label="Override margins"
+            checked={!!attributes.overrideWrapperMarginEnabled}
+            onChange={(value) =>
+              setAttributes({ overrideWrapperMarginEnabled: value })
+            }
+          />
+
+          {attributes.overrideWrapperMarginEnabled && (
+            <>
+              <TextControl
+                label="Margin Top"
+                value={attributes.overrideWrapperMarginTop || ""}
+                help="Leave blank to use global default."
+                onChange={(value) =>
+                  setAttributes({ overrideWrapperMarginTop: value })
+                }
+              />
+
+              <TextControl
+                label="Margin Right"
+                value={attributes.overrideWrapperMarginRight || ""}
+                help="Leave blank to use global default."
+                onChange={(value) =>
+                  setAttributes({ overrideWrapperMarginRight: value })
+                }
+              />
+
+              <TextControl
+                label="Margin Bottom"
+                value={attributes.overrideWrapperMarginBottom || ""}
+                help="Leave blank to use global default."
+                onChange={(value) =>
+                  setAttributes({ overrideWrapperMarginBottom: value })
+                }
+              />
+
+              <TextControl
+                label="Margin Left"
+                value={attributes.overrideWrapperMarginLeft || ""}
+                help="Leave blank to use global default."
+                onChange={(value) =>
+                  setAttributes({ overrideWrapperMarginLeft: value })
+                }
+              />
+            </>
           )}
 
           <ToggleControl

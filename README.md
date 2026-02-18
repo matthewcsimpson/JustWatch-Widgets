@@ -8,6 +8,7 @@ WordPress plugin that adds a Gutenberg block for embedding JustWatch widgets usi
 - Per-block overrides in the block editor.
 - Language override (limited to tested languages).
 - Offer label, icon scale, max services, heading, border, and fallback message controls.
+- Configurable wrapper margin as a global default and per-block override.
 - Dynamic server-side render via block `render.php`.
 - Icon scale option labels shown as percentages (for example `60%`, `100%`, `200%`).
 - Uninstall cleanup removes saved plugin options when plugin is deleted.

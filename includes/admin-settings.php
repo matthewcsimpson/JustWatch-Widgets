@@ -3,6 +3,33 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+if (!function_exists('jw_widgets_sanitize_margin_side_value')) {
+    function jw_widgets_sanitize_margin_side_value($value): string {
+        if (!is_string($value)) {
+            return '';
+        }
+
+        $value = trim($value);
+        if ($value === '') {
+            return '';
+        }
+
+        if (strlen($value) > 30) {
+            return '';
+        }
+
+        if (preg_match('/[^0-9a-zA-Z.%\-]/', $value) === 1) {
+            return '';
+        }
+
+        if (!preg_match('/^(0|auto|-?\d+(?:\.\d+)?(?:px|em|rem|%|vw|vh))$/i', $value)) {
+            return '';
+        }
+
+        return $value;
+    }
+}
+
 /**
  * Settings page + options registration for JustWatch Widgets.
  * No widget preview.
@@ -123,6 +150,38 @@ add_action('admin_init', static function (): void {
             return preg_match('/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', $value) === 1 ? $value : '#dcdcdc';
         },
         'default' => '#dcdcdc',
+    ]);
+
+    register_setting('jw_widgets_settings', JW_WIDGETS_OPTION_WRAPPER_MARGIN_TOP, [
+        'type' => 'string',
+        'sanitize_callback' => static function ($value): string {
+            return jw_widgets_sanitize_margin_side_value($value);
+        },
+        'default' => '0',
+    ]);
+
+    register_setting('jw_widgets_settings', JW_WIDGETS_OPTION_WRAPPER_MARGIN_RIGHT, [
+        'type' => 'string',
+        'sanitize_callback' => static function ($value): string {
+            return jw_widgets_sanitize_margin_side_value($value);
+        },
+        'default' => '0',
+    ]);
+
+    register_setting('jw_widgets_settings', JW_WIDGETS_OPTION_WRAPPER_MARGIN_BOTTOM, [
+        'type' => 'string',
+        'sanitize_callback' => static function ($value): string {
+            return jw_widgets_sanitize_margin_side_value($value);
+        },
+        'default' => '1rem',
+    ]);
+
+    register_setting('jw_widgets_settings', JW_WIDGETS_OPTION_WRAPPER_MARGIN_LEFT, [
+        'type' => 'string',
+        'sanitize_callback' => static function ($value): string {
+            return jw_widgets_sanitize_margin_side_value($value);
+        },
+        'default' => '0',
     ]);
 
     // Override label colour (checkbox + colour)
@@ -397,12 +456,67 @@ add_action('admin_init', static function (): void {
         'Offer Label',
         static function (): void {
             $value = (string) get_option(JW_WIDGETS_OPTION_OFFER_LABEL, '');
+            $preview_type_url = plugins_url('../assets/preview-labels-type.png', __FILE__);
+            $preview_price_url = plugins_url('../assets/preview-labels-price.png', __FILE__);
+            $preview_none_url = plugins_url('../assets/preview-labels-none.png', __FILE__);
     ?>
-        <select name="<?php echo esc_attr(JW_WIDGETS_OPTION_OFFER_LABEL); ?>">
-            <option value="" <?php selected('', $value); ?>>Monetization Type</option>
-            <option value="price" <?php selected('price', $value); ?>>Price</option>
-            <option value="none" <?php selected('none', $value); ?>>None</option>
-        </select>
+        <div class="jw-inline-flex-wrap">
+            <select id="jw_widgets_offer_label" name="<?php echo esc_attr(JW_WIDGETS_OPTION_OFFER_LABEL); ?>">
+                <option value="" <?php selected('', $value); ?>>Monetization Type</option>
+                <option value="price" <?php selected('price', $value); ?>>Price</option>
+                <option value="none" <?php selected('none', $value); ?>>None</option>
+            </select>
+
+            <div class="jw-offer-label-preview" aria-hidden="true">
+                <img
+                    id="jw_widgets_offer_label_preview"
+                    class="jw-offer-label-preview__img"
+                    src="<?php echo esc_url($value === 'price' ? $preview_price_url : ($value === 'none' ? $preview_none_url : $preview_type_url)); ?>"
+                    data-preview-type="<?php echo esc_url($preview_type_url); ?>"
+                    data-preview-price="<?php echo esc_url($preview_price_url); ?>"
+                    data-preview-none="<?php echo esc_url($preview_none_url); ?>"
+                    alt="" />
+            </div>
+        </div>
+
+        <script>
+            (() => {
+                const selectElement = document.getElementById('jw_widgets_offer_label');
+                const previewImageElement = document.getElementById('jw_widgets_offer_label_preview');
+                if (!selectElement || !previewImageElement) return;
+
+                const syncPreview = () => {
+                    if (selectElement.value === 'price') {
+                        previewImageElement.src = previewImageElement.dataset.previewPrice;
+                        return;
+                    }
+
+                    if (selectElement.value === 'none') {
+                        previewImageElement.src = previewImageElement.dataset.previewNone;
+                        return;
+                    }
+
+                    previewImageElement.src = previewImageElement.dataset.previewType;
+                };
+
+                selectElement.addEventListener('change', syncPreview);
+                syncPreview();
+            })();
+        </script>
+
+        <style>
+            .jw-offer-label-preview {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .jw-offer-label-preview__img {
+                width: 150px;
+                height: auto;
+                display: block;
+            }
+        </style>
     <?php
         },
         'jw-widgets',
@@ -456,7 +570,7 @@ add_action('admin_init', static function (): void {
         static function (): void {
             $value = (string) get_option(JW_WIDGETS_OPTION_SCALE, '1.0');
             $allowed = ['0.6', '0.7', '0.8', '0.9', '1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '1.9', '2.0'];
-            $gem_url = plugins_url('../assets/gem.png', __FILE__);
+            $icon_preview_url = plugins_url('../assets/preview-icon.png', __FILE__);
     ?>
         <div class="jw-inline-flex-wrap">
             <select id="jw_widgets_scale" name="<?php echo esc_attr(JW_WIDGETS_OPTION_SCALE); ?>">
@@ -469,7 +583,7 @@ add_action('admin_init', static function (): void {
             </select>
 
             <div class="jw-icon-preview" id="jw_icon_preview" aria-hidden="true">
-                <img class="jw-icon-preview__img" src="<?php echo esc_url($gem_url); ?>" alt="" />
+                <img class="jw-icon-preview__img" src="<?php echo esc_url($icon_preview_url); ?>" alt="" />
             </div>
         </div>
 
@@ -565,6 +679,109 @@ add_action('admin_init', static function (): void {
                 window.jwWidgetsBindToggle('jw_widgets_border_enabled', 'jw_widgets_border_colour');
             })();
         </script>
+    <?php
+        },
+        'jw-widgets',
+        'jw_widgets_display'
+    );
+
+    add_settings_field(
+        'jw_widgets_wrapper_margin',
+        'Margins',
+        static function (): void {
+            $top = (string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_TOP, '0');
+            $right = (string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_RIGHT, '0');
+            $bottom = (string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_BOTTOM, '1rem');
+            $left = (string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_LEFT, '0');
+            $preview_url = plugins_url('../assets/preview-margins.png', __FILE__);
+    ?>
+        <div class="jw-margin-grid" aria-label="Margin controls">
+            <input
+                id="jw_widgets_wrapper_margin_top"
+                class="jw-margin-grid__input jw-margin-grid__top"
+                type="text"
+                name="<?php echo esc_attr(JW_WIDGETS_OPTION_WRAPPER_MARGIN_TOP); ?>"
+                value="<?php echo esc_attr($top); ?>"
+                placeholder="Top" />
+
+            <input
+                id="jw_widgets_wrapper_margin_right"
+                class="jw-margin-grid__input jw-margin-grid__right"
+                type="text"
+                name="<?php echo esc_attr(JW_WIDGETS_OPTION_WRAPPER_MARGIN_RIGHT); ?>"
+                value="<?php echo esc_attr($right); ?>"
+                placeholder="Right" />
+
+            <input
+                id="jw_widgets_wrapper_margin_bottom"
+                class="jw-margin-grid__input jw-margin-grid__bottom"
+                type="text"
+                name="<?php echo esc_attr(JW_WIDGETS_OPTION_WRAPPER_MARGIN_BOTTOM); ?>"
+                value="<?php echo esc_attr($bottom); ?>"
+                placeholder="Bottom" />
+
+            <input
+                id="jw_widgets_wrapper_margin_left"
+                class="jw-margin-grid__input jw-margin-grid__left"
+                type="text"
+                name="<?php echo esc_attr(JW_WIDGETS_OPTION_WRAPPER_MARGIN_LEFT); ?>"
+                value="<?php echo esc_attr($left); ?>"
+                placeholder="Left" />
+
+            <div class="jw-margin-grid__center" aria-hidden="true">
+                <img class="jw-margin-grid__preview" src="<?php echo esc_url($preview_url); ?>" alt="" />
+            </div>
+        </div>
+
+        <p class="description" style="margin: 8px 0 0;">Each side supports a single CSS value (for example: 16px, 1rem, 5%, auto, 0).</p>
+
+        <style>
+            .jw-margin-grid {
+                display: grid;
+                grid-template-columns: 110px 150px 110px;
+                grid-template-rows: auto auto auto;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .jw-margin-grid__input {
+                width: 100px;
+            }
+
+            .jw-margin-grid__top {
+                grid-column: 2;
+                grid-row: 1;
+                justify-self: center;
+            }
+
+            .jw-margin-grid__right {
+                grid-column: 3;
+                grid-row: 2;
+            }
+
+            .jw-margin-grid__bottom {
+                grid-column: 2;
+                grid-row: 3;
+                justify-self: center;
+            }
+
+            .jw-margin-grid__left {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .jw-margin-grid__center {
+                grid-column: 2;
+                grid-row: 2;
+                margin: 0 auto;
+            }
+
+            .jw-margin-grid__preview {
+                width: 150px;
+                height: auto;
+                display: block;
+            }
+        </style>
     <?php
         },
         'jw-widgets',
@@ -740,13 +957,59 @@ add_action('admin_init', static function (): void {
         'Heading Position',
         static function (): void {
             $value = (int) get_option(JW_WIDGETS_OPTION_HEADING_OUTSIDE_BORDER, 0);
+            $preview_inside_url = plugins_url('../assets/preview-heading-inside.png', __FILE__);
+            $preview_outside_url = plugins_url('../assets/preview-heading-outside.png', __FILE__);
     ?>
-        <select
-            id="jw_widgets_heading_outside_border"
-            name="<?php echo esc_attr(JW_WIDGETS_OPTION_HEADING_OUTSIDE_BORDER); ?>">
-            <option value="0" <?php selected(0, $value); ?>>Inside Border</option>
-            <option value="1" <?php selected(1, $value); ?>>Outside Border</option>
-        </select>
+        <div class="jw-inline-flex-wrap">
+            <select
+                id="jw_widgets_heading_outside_border"
+                name="<?php echo esc_attr(JW_WIDGETS_OPTION_HEADING_OUTSIDE_BORDER); ?>">
+                <option value="0" <?php selected(0, $value); ?>>Inside Border</option>
+                <option value="1" <?php selected(1, $value); ?>>Outside Border</option>
+            </select>
+
+            <div class="jw-heading-preview" aria-hidden="true">
+                <img
+                    id="jw_widgets_heading_position_preview"
+                    class="jw-heading-preview__img"
+                    src="<?php echo esc_url($value === 1 ? $preview_outside_url : $preview_inside_url); ?>"
+                    data-preview-inside="<?php echo esc_url($preview_inside_url); ?>"
+                    data-preview-outside="<?php echo esc_url($preview_outside_url); ?>"
+                    alt="" />
+            </div>
+        </div>
+
+        <script>
+            (() => {
+                const selectElement = document.getElementById('jw_widgets_heading_outside_border');
+                const previewImageElement = document.getElementById('jw_widgets_heading_position_preview');
+                if (!selectElement || !previewImageElement) return;
+
+                const syncPreview = () => {
+                    const isOutside = selectElement.value === '1';
+                    previewImageElement.src = isOutside ?
+                        previewImageElement.dataset.previewOutside :
+                        previewImageElement.dataset.previewInside;
+                };
+
+                selectElement.addEventListener('change', syncPreview);
+                syncPreview();
+            })();
+        </script>
+
+        <style>
+            .jw-heading-preview {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .jw-heading-preview__img {
+                width: 150px;
+                height: auto;
+                display: block;
+            }
+        </style>
     <?php
         },
         'jw-widgets',

@@ -45,6 +45,28 @@ if (preg_match('/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', $jw_widgets_border_colour
     $jw_widgets_border_colour = '#dcdcdc';
 }
 
+$jw_widgets_sanitize_margin_side = static function ($value): string {
+    if (!is_string($value)) {
+        return '';
+    }
+
+    $value = trim($value);
+    if ($value === '' || strlen($value) > 30) {
+        return '';
+    }
+
+    if (preg_match('/[^0-9a-zA-Z.%\-]/', $value) === 1) {
+        return '';
+    }
+
+    return preg_match('/^(0|auto|-?\d+(?:\.\d+)?(?:px|em|rem|%|vw|vh))$/i', $value) ? $value : '';
+};
+
+$jw_widgets_wrapper_margin_top = $jw_widgets_sanitize_margin_side((string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_TOP, '0'));
+$jw_widgets_wrapper_margin_right = $jw_widgets_sanitize_margin_side((string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_RIGHT, '0'));
+$jw_widgets_wrapper_margin_bottom = $jw_widgets_sanitize_margin_side((string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_BOTTOM, '1rem'));
+$jw_widgets_wrapper_margin_left = $jw_widgets_sanitize_margin_side((string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_LEFT, '0'));
+
 // Label colour override
 $jw_widgets_label_override_enabled = (int) get_option(JW_WIDGETS_OPTION_TEXT_COLOUR_OVERRIDE_ENABLED, 0) === 1;
 
@@ -148,6 +170,73 @@ if ($jw_widgets_overrides_enabled) {
         }
     }
 
+    $jw_widgets_use_wrapper_margin_overrides = array_key_exists('overrideWrapperMarginEnabled', $attributes)
+        ? (bool) $attributes['overrideWrapperMarginEnabled']
+        : (
+            isset($attributes['overrideWrapperMargin'])
+            || array_key_exists('overrideWrapperMarginTop', $attributes)
+            || array_key_exists('overrideWrapperMarginRight', $attributes)
+            || array_key_exists('overrideWrapperMarginBottom', $attributes)
+            || array_key_exists('overrideWrapperMarginLeft', $attributes)
+        );
+
+    if ($jw_widgets_use_wrapper_margin_overrides) {
+        if (array_key_exists('overrideWrapperMarginTop', $attributes)) {
+            $jw_widgets_override_wrapper_margin_top = $jw_widgets_sanitize_margin_side((string) $attributes['overrideWrapperMarginTop']);
+            $jw_widgets_wrapper_margin_top = $jw_widgets_override_wrapper_margin_top;
+        }
+
+        if (array_key_exists('overrideWrapperMarginRight', $attributes)) {
+            $jw_widgets_override_wrapper_margin_right = $jw_widgets_sanitize_margin_side((string) $attributes['overrideWrapperMarginRight']);
+            $jw_widgets_wrapper_margin_right = $jw_widgets_override_wrapper_margin_right;
+        }
+
+        if (array_key_exists('overrideWrapperMarginBottom', $attributes)) {
+            $jw_widgets_override_wrapper_margin_bottom = $jw_widgets_sanitize_margin_side((string) $attributes['overrideWrapperMarginBottom']);
+            $jw_widgets_wrapper_margin_bottom = $jw_widgets_override_wrapper_margin_bottom;
+        }
+
+        if (array_key_exists('overrideWrapperMarginLeft', $attributes)) {
+            $jw_widgets_override_wrapper_margin_left = $jw_widgets_sanitize_margin_side((string) $attributes['overrideWrapperMarginLeft']);
+            $jw_widgets_wrapper_margin_left = $jw_widgets_override_wrapper_margin_left;
+        }
+
+        if (
+            isset($attributes['overrideWrapperMargin'])
+            && !array_key_exists('overrideWrapperMarginTop', $attributes)
+            && !array_key_exists('overrideWrapperMarginRight', $attributes)
+            && !array_key_exists('overrideWrapperMarginBottom', $attributes)
+            && !array_key_exists('overrideWrapperMarginLeft', $attributes)
+        ) {
+            $jw_widgets_override_wrapper_margin = trim((string) $attributes['overrideWrapperMargin']);
+            if ($jw_widgets_override_wrapper_margin !== '' && preg_match('/[^0-9a-zA-Z.%\-\s]/', $jw_widgets_override_wrapper_margin) !== 1) {
+                $jw_widgets_override_margin_parts = preg_split('/\s+/', $jw_widgets_override_wrapper_margin);
+                if (is_array($jw_widgets_override_margin_parts) && count($jw_widgets_override_margin_parts) >= 1 && count($jw_widgets_override_margin_parts) <= 4) {
+                    $jw_widgets_valid_legacy_override = true;
+
+                    foreach ($jw_widgets_override_margin_parts as $jw_widgets_override_margin_part) {
+                        if (!preg_match('/^(0|auto|-?\d+(?:\.\d+)?(?:px|em|rem|%|vw|vh))$/i', $jw_widgets_override_margin_part)) {
+                            $jw_widgets_valid_legacy_override = false;
+                            break;
+                        }
+                    }
+
+                    if ($jw_widgets_valid_legacy_override) {
+                        $jw_widgets_top = $jw_widgets_override_margin_parts[0];
+                        $jw_widgets_right = $jw_widgets_override_margin_parts[1] ?? $jw_widgets_top;
+                        $jw_widgets_bottom = $jw_widgets_override_margin_parts[2] ?? $jw_widgets_top;
+                        $jw_widgets_left = $jw_widgets_override_margin_parts[3] ?? ($jw_widgets_override_margin_parts[1] ?? $jw_widgets_top);
+
+                        $jw_widgets_wrapper_margin_top = $jw_widgets_sanitize_margin_side($jw_widgets_top);
+                        $jw_widgets_wrapper_margin_right = $jw_widgets_sanitize_margin_side($jw_widgets_right);
+                        $jw_widgets_wrapper_margin_bottom = $jw_widgets_sanitize_margin_side($jw_widgets_bottom);
+                        $jw_widgets_wrapper_margin_left = $jw_widgets_sanitize_margin_side($jw_widgets_left);
+                    }
+                }
+            }
+        }
+    }
+
     if (array_key_exists('overrideTextColourOverrideEnabled', $attributes)) {
         $jw_widgets_label_override_enabled = (bool) $attributes['overrideTextColourOverrideEnabled'];
     }
@@ -222,9 +311,22 @@ if ($jw_widgets_border_enabled) {
 
 $jw_widgets_heading_style = ($jw_widgets_label_override_enabled && $jw_widgets_text_colour !== '') ? ('color: ' . $jw_widgets_text_colour . ';') : '';
 $jw_widgets_link_style    = $jw_widgets_heading_style;
+$jw_widgets_wrapper_style = '';
+if ($jw_widgets_wrapper_margin_top !== '') {
+    $jw_widgets_wrapper_style .= 'margin-top: ' . $jw_widgets_wrapper_margin_top . ';';
+}
+if ($jw_widgets_wrapper_margin_right !== '') {
+    $jw_widgets_wrapper_style .= 'margin-right: ' . $jw_widgets_wrapper_margin_right . ';';
+}
+if ($jw_widgets_wrapper_margin_bottom !== '') {
+    $jw_widgets_wrapper_style .= 'margin-bottom: ' . $jw_widgets_wrapper_margin_bottom . ';';
+}
+if ($jw_widgets_wrapper_margin_left !== '') {
+    $jw_widgets_wrapper_style .= 'margin-left: ' . $jw_widgets_wrapper_margin_left . ';';
+}
 
-// '' => monetization_type, 'price' => price, 'none' => omit
-$jw_widgets_offer_label_attr = ($jw_widgets_offer_label === 'none') ? '' : (($jw_widgets_offer_label === 'price') ? 'price' : 'monetization_type');
+// '' => monetization_type, 'price' => price, 'none' => none
+$jw_widgets_offer_label_attr = ($jw_widgets_offer_label === 'price') ? 'price' : (($jw_widgets_offer_label === 'none') ? 'none' : 'monetization_type');
 
 $jw_widgets_heading_html = sprintf(
     '<%1$s class="jw-widgets__heading" style="%2$s">%3$s</%1$s>',
@@ -244,7 +346,7 @@ $jw_widgets_allowed_heading_tags = [
 ];
 ?>
 
-<div class="jw-widgets__wrapper">
+<div class="jw-widgets__wrapper" <?php echo $jw_widgets_wrapper_style !== '' ? ' style="' . esc_attr($jw_widgets_wrapper_style) . '"' : ''; ?>>
     <?php if ($jw_widgets_show_heading && $jw_widgets_heading_outside_border) : ?>
         <?php echo wp_kses($jw_widgets_heading_html, $jw_widgets_allowed_heading_tags); ?>
     <?php endif; ?>
@@ -264,7 +366,7 @@ $jw_widgets_allowed_heading_tags = [
             data-scale="<?php echo esc_attr($jw_widgets_scale); ?>"
             data-no-offers-message="<?php echo esc_attr($jw_widgets_no_offers_message); ?>"
             data-title-not-found-message="<?php echo esc_attr($jw_widgets_title_not_found_message); ?>"
-            <?php if ($jw_widgets_offer_label_attr !== '') : ?>data-offer-label="<?php echo esc_attr($jw_widgets_offer_label_attr); ?>" <?php endif; ?>
+            data-offer-label="<?php echo esc_attr($jw_widgets_offer_label_attr); ?>"
             <?php if ($jw_widgets_max_offers_enabled) : ?>data-max-offers="<?php echo esc_attr((string) $jw_widgets_max_offers_int); ?>" <?php endif; ?>
             <?php if ($jw_widgets_lang_enabled) : ?>data-language="<?php echo esc_attr($jw_widgets_lang); ?>" <?php endif; ?>></div>
 

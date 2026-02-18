@@ -38,6 +38,10 @@ if (!defined('JW_WIDGETS_OPTION_HEADING_OUTSIDE_BORDER')) define('JW_WIDGETS_OPT
 
 if (!defined('JW_WIDGETS_OPTION_BORDER_ENABLED')) define('JW_WIDGETS_OPTION_BORDER_ENABLED', 'jw_widgets_border_enabled');
 if (!defined('JW_WIDGETS_OPTION_BORDER_COLOUR')) define('JW_WIDGETS_OPTION_BORDER_COLOUR', 'jw_widgets_border_colour');
+if (!defined('JW_WIDGETS_OPTION_WRAPPER_MARGIN_TOP')) define('JW_WIDGETS_OPTION_WRAPPER_MARGIN_TOP', 'jw_widgets_wrapper_margin_top');
+if (!defined('JW_WIDGETS_OPTION_WRAPPER_MARGIN_RIGHT')) define('JW_WIDGETS_OPTION_WRAPPER_MARGIN_RIGHT', 'jw_widgets_wrapper_margin_right');
+if (!defined('JW_WIDGETS_OPTION_WRAPPER_MARGIN_BOTTOM')) define('JW_WIDGETS_OPTION_WRAPPER_MARGIN_BOTTOM', 'jw_widgets_wrapper_margin_bottom');
+if (!defined('JW_WIDGETS_OPTION_WRAPPER_MARGIN_LEFT')) define('JW_WIDGETS_OPTION_WRAPPER_MARGIN_LEFT', 'jw_widgets_wrapper_margin_left');
 
 if (!defined('JW_WIDGETS_OPTION_TEXT_COLOUR_OVERRIDE_ENABLED')) define('JW_WIDGETS_OPTION_TEXT_COLOUR_OVERRIDE_ENABLED', 'jw_widgets_text_colour_override_enabled');
 if (!defined('JW_WIDGETS_OPTION_TEXT_COLOUR')) define('JW_WIDGETS_OPTION_TEXT_COLOUR', 'jw_widgets_text_colour');
@@ -88,6 +92,10 @@ add_action('enqueue_block_editor_assets', static function (): void {
     'headingPosition' => $heading_position,
     'borderEnabled' => (int) get_option(JW_WIDGETS_OPTION_BORDER_ENABLED, 1) === 1,
     'borderColour' => (string) get_option(JW_WIDGETS_OPTION_BORDER_COLOUR, '#dcdcdc'),
+    'wrapperMarginTop' => (string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_TOP, '0'),
+    'wrapperMarginRight' => (string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_RIGHT, '0'),
+    'wrapperMarginBottom' => (string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_BOTTOM, '1rem'),
+    'wrapperMarginLeft' => (string) get_option(JW_WIDGETS_OPTION_WRAPPER_MARGIN_LEFT, '0'),
     'textColourOverrideEnabled' => (int) get_option(JW_WIDGETS_OPTION_TEXT_COLOUR_OVERRIDE_ENABLED, 0) === 1,
     'textColour' => (string) get_option(JW_WIDGETS_OPTION_TEXT_COLOUR, ''),
     'noOffersMessage' => (string) get_option(JW_WIDGETS_OPTION_NO_OFFERS_MESSAGE, $default_no_offers),

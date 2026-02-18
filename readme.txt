@@ -21,6 +21,7 @@ Features include:
 - Language override support (tested languages only).
 - Offer label, max offers, icon scale, and message customization.
 - Heading and border display controls.
+- Configurable wrapper margin globally and per block.
 
 Tested language override options:
 
@@ -69,8 +70,7 @@ On plugin uninstall (delete), plugin options are cleaned up from the database.
 * First stable release.
 * Admin defaults and block-level overrides.
 * Language override support with tested language list.
-* Icon size options displayed as percentages (for example 60%, 100%, 200%).
-* Added uninstall cleanup for saved plugin options.
+* Uninstall cleanup for saved plugin options.
 
 == Upgrade Notice ==
 
