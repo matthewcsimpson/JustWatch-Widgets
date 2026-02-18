@@ -1,0 +1,57 @@
+:root {
+  --jw-text-colour: #000;
+  --font-sans-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --logo-image-black: url(https://widget.justwatch.com/assets/JW_logo_black_10px.svg);
+}
+
+/* If the theme marks dark mode on html/body, use white for our wrapper text */
+html.dark,
+body.dark,
+html[data-theme="dark"],
+body[data-theme="dark"],
+.dark,
+[data-theme="dark"] {
+  --jw-text-colour: #fff;
+}
+
+.jw-widgets__widget {
+  padding: 10px;
+  font-size: small;
+  font-family: var(--font-sans-serif);
+}
+
+.jw-widgets__widget iframe {
+  margin: 0;
+}
+
+.jw-widgets__widget p {
+  font-size: small;
+  margin: 0 0 6px 0;
+}
+
+.jw-widgets__heading {
+  margin: 0 0 8px 0;
+}
+
+.jw-widgets__link {
+  font-size: 11px;
+  font-family: var(--font-sans-serif);
+  color: var(--jw-text-colour);
+  text-decoration: none;
+  margin-bottom: 50px;
+}
+
+.jw-widgets__logo {
+  display: -moz-inline-box;
+  display: inline-block;
+  width: 66px;
+  height: 10px;
+  margin-left: 3px;
+  background: var(--logo-image-black);
+  overflow: hidden;
+  text-indent: -3000px;
+}
+
+.jw-widgets__linkcontainer {
+  margin-top: 6px;
+}

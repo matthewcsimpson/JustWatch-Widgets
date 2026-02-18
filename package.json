@@ -1,0 +1,12 @@
+{
+  "name": "justwatch-widgets",
+  "version": "0.6.0",
+  "private": true,
+  "devDependencies": {
+    "@wordpress/scripts": "^30.0.0"
+  },
+  "scripts": {
+    "build": "wp-scripts build block/index.js --output-path=block/build",
+    "start": "wp-scripts start block/index.js --output-path=block/build"
+  }
+}
