@@ -48,34 +48,41 @@ WordPress plugin that adds a Gutenberg block for embedding JustWatch widgets usi
 3. Enter the external ID.
 4. Optional: enable **Overrides** for per-block settings.
 
-## Development
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Build block assets:
-
-```bash
-npm run build
-```
-
-Watch mode:
-
-```bash
-npm run start
-```
-
 ## Project Structure
 
-- `justwatch-widgets.php` — plugin bootstrap and block registration.
-- `includes/admin-settings.php` — settings page + option registration.
-- `block/edit.js` — block inspector controls.
-- `block/render.php` — server-side output.
-- `assets/justwatch-widget.css` — frontend styles.
-- `block/build/*` — compiled block assets.
+```text
+justwatch-widgets/
+├─ justwatch-widgets.php
+├─ includes/
+│  └─ admin-settings.php
+├─ block/
+│  ├─ block.json
+│  ├─ edit.js
+│  ├─ index.js
+│  ├─ render.php
+│  └─ build/
+│     ├─ index.asset.php
+│     └─ index.js
+├─ assets/
+│  ├─ justwatch-widget.css
+│  ├─ banner-772x250.png
+│  ├─ banner-1544x500.png
+│  ├─ icon-128x128.png
+│  ├─ icon-256x256.png
+│  ├─ preview-icon.png
+│  ├─ preview-margins.png
+│  ├─ preview-heading-inside.png
+│  ├─ preview-heading-outside.png
+│  ├─ preview-labels-type.png
+│  ├─ preview-labels-price.png
+│  └─ preview-labels-none.png
+├─ uninstall.php
+├─ package.json
+├─ package-lock.json
+├─ readme.txt
+├─ README.md
+└─ LICENSE
+```
 
 ## Release Notes
 

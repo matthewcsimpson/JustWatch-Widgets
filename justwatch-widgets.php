@@ -2,9 +2,11 @@
 
 /**
  * Plugin Name: JustWatch Widgets Block
+ * Plugin URI: https://matthewcsimpson.dev
  * Description: Gutenberg block for JustWatch widgets + global script + CSS enqueue.
  * Version: 1.0.0
  * Author: Matthew Simpson
+ * Author URI: https://matthewcsimpson.dev
  * Text Domain: justwatch-widgets
  * Requires at least: 6.0
  * Requires PHP: 7.4

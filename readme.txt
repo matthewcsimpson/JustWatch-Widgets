@@ -1,5 +1,6 @@
 === JustWatch Widgets Block ===
 Contributors: matthewsimpson
+Donate link: https://ko-fi.com/matthewsimpson
 Tags: justwatch, streaming, movies, tv, gutenberg
 Requires at least: 6.0
 Tested up to: 6.9
@@ -62,7 +63,9 @@ On plugin uninstall (delete), plugin options are cleaned up from the database.
 
 1. Global plugin settings in wp-admin.
 2. JustWatch Widget block controls in the editor.
-3. Per-block Overrides panel.
+3. Block options with overrides disabled
+4. Block options with overrides enabled
+5. The widget rendered serveal different times.  This does not represent all of the available customizations, just a taste of what's possible. 
 
 == Changelog ==
 
