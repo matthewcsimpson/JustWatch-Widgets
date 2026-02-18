@@ -72,30 +72,17 @@ add_action('admin_init', static function (): void {
             $value = trim($value);
 
             $allowed = [
-                'en',
+                'ar',
+                'zh',
+                'cs',
                 'fr',
-                'es',
                 'de',
                 'it',
-                'pt',
-                'nl',
-                'sv',
-                'no',
-                'da',
-                'fi',
                 'pl',
-                'cs',
-                'hu',
+                'pt',
                 'ro',
-                'el',
-                'tr',
                 'ru',
-                'uk',
-                'ja',
-                'ko',
-                'zh',
-                'hi',
-                'ar'
+                'es',
             ];
 
             return in_array($value, $allowed, true) ? $value : 'en';
@@ -343,30 +330,17 @@ add_action('admin_init', static function (): void {
             $value = (string) get_option(JW_WIDGETS_OPTION_LANGUAGE, 'en');
 
             $options = [
-                ['en', 'English'],
+                ['ar', 'Arabic'],
+                ['zh', 'Chinese'],
+                ['cs', 'Czech'],
                 ['fr', 'French'],
-                ['es', 'Spanish'],
                 ['de', 'German'],
                 ['it', 'Italian'],
-                ['pt', 'Portuguese'],
-                ['nl', 'Dutch'],
-                ['sv', 'Swedish'],
-                ['no', 'Norwegian'],
-                ['da', 'Danish'],
-                ['fi', 'Finnish'],
                 ['pl', 'Polish'],
-                ['cs', 'Czech'],
-                ['hu', 'Hungarian'],
+                ['pt', 'Portugese'],
                 ['ro', 'Romanian'],
-                ['el', 'Greek'],
-                ['tr', 'Turkish'],
                 ['ru', 'Russian'],
-                ['uk', 'Ukrainian'],
-                ['ja', 'Japanese'],
-                ['ko', 'Korean'],
-                ['zh', 'Chinese'],
-                ['hi', 'Hindi'],
-                ['ar', 'Arabic'],
+                ['es', 'Spanish'],
             ];
     ?>
         <label class="jw-inline-flex">
@@ -487,8 +461,9 @@ add_action('admin_init', static function (): void {
         <div class="jw-inline-flex-wrap">
             <select id="jw_widgets_scale" name="<?php echo esc_attr(JW_WIDGETS_OPTION_SCALE); ?>">
                 <?php foreach ($allowed as $optionValue): ?>
+                    <?php $percentLabel = (string) ((int) round(((float) $optionValue) * 100)) . '%'; ?>
                     <option value="<?php echo esc_attr($optionValue); ?>" <?php selected($optionValue, $value); ?>>
-                        <?php echo esc_html($optionValue); ?>
+                        <?php echo esc_html($percentLabel); ?>
                     </option>
                 <?php endforeach; ?>
             </select>

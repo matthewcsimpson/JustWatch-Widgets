@@ -1,6 +1,6 @@
 {
   "name": "justwatch-widgets",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "private": true,
   "devDependencies": {
     "@wordpress/scripts": "^30.0.0"

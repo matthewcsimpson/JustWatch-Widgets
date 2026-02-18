@@ -82,30 +82,17 @@ const Edit = ({ attributes, setAttributes }) => {
   );
 
   const languageOptions = [
-    { label: "English", value: "en" },
+    { label: "Arabic", value: "ar" },
+    { label: "Chinese", value: "zh" },
+    { label: "Czech", value: "cs" },
     { label: "French", value: "fr" },
-    { label: "Spanish", value: "es" },
     { label: "German", value: "de" },
     { label: "Italian", value: "it" },
-    { label: "Portuguese", value: "pt" },
-    { label: "Dutch", value: "nl" },
-    { label: "Swedish", value: "sv" },
-    { label: "Norwegian", value: "no" },
-    { label: "Danish", value: "da" },
-    { label: "Finnish", value: "fi" },
     { label: "Polish", value: "pl" },
-    { label: "Czech", value: "cs" },
-    { label: "Hungarian", value: "hu" },
+    { label: "Portugese", value: "pt" },
     { label: "Romanian", value: "ro" },
-    { label: "Greek", value: "el" },
-    { label: "Turkish", value: "tr" },
     { label: "Russian", value: "ru" },
-    { label: "Ukrainian", value: "uk" },
-    { label: "Japanese", value: "ja" },
-    { label: "Korean", value: "ko" },
-    { label: "Chinese", value: "zh" },
-    { label: "Hindi", value: "hi" },
-    { label: "Arabic", value: "ar" },
+    { label: "Spanish", value: "es" },
   ];
 
   const scaleOptions = [
@@ -124,7 +111,10 @@ const Edit = ({ attributes, setAttributes }) => {
     "1.8",
     "1.9",
     "2.0",
-  ].map((value) => ({ label: value, value }));
+  ].map((value) => ({
+    label: `${Math.round(parseFloat(value) * 100)}%`,
+    value,
+  }));
 
   const maxOfferOptions = Array.from({ length: 20 }, (_, index) => {
     const value = String(index + 1);

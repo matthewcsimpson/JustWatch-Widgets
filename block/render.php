@@ -81,30 +81,17 @@ $lang_enabled = (int) get_option(JW_WIDGETS_OPTION_LANGUAGE_OVERRIDE_ENABLED, 0)
 
 $lang = (string) get_option(JW_WIDGETS_OPTION_LANGUAGE, 'en');
 $allowed_lang = [
-    'en',
+    'ar',
+    'zh',
+    'cs',
     'fr',
-    'es',
     'de',
     'it',
-    'pt',
-    'nl',
-    'sv',
-    'no',
-    'da',
-    'fi',
     'pl',
-    'cs',
-    'hu',
+    'pt',
     'ro',
-    'el',
-    'tr',
     'ru',
-    'uk',
-    'ja',
-    'ko',
-    'zh',
-    'hi',
-    'ar'
+    'es',
 ];
 if (!in_array($lang, $allowed_lang, true)) {
     $lang = 'en';

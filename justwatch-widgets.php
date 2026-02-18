@@ -3,8 +3,14 @@
 /**
  * Plugin Name: JustWatch Widgets Block
  * Description: Gutenberg block for JustWatch widgets + global script + CSS enqueue.
- * Version: 0.6.0
+ * Version: 1.0.0
  * Author: Matthew Simpson
+ * Text Domain: jw-widgets
+ * Requires at least: 6.0
+ * Requires PHP: 7.4
+ * Tested up to: 6.9.1
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if (!defined('ABSPATH')) {
@@ -96,7 +102,7 @@ add_action('wp_enqueue_scripts', static function (): void {
   if (is_admin()) return;
 
   $style_path = JW_WIDGETS_PLUGIN_DIR . 'assets/justwatch-widget.css';
-  $style_ver = file_exists($style_path) ? (string) filemtime($style_path) : '0.6.0';
+  $style_ver = file_exists($style_path) ? (string) filemtime($style_path) : '1.0.0';
 
   wp_enqueue_style(
     'jw-widgets-styles',
