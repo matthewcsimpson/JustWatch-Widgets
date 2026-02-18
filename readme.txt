@@ -57,6 +57,12 @@ Yes. Use the Overrides panel in the block inspector.
 
 On plugin uninstall (delete), plugin options are cleaned up from the database.
 
+== Screenshots ==
+
+1. Global plugin settings in wp-admin.
+2. JustWatch Widget block controls in the editor.
+3. Per-block Overrides panel.
+
 == Changelog ==
 
 = 1.0.0 =
@@ -65,3 +71,8 @@ On plugin uninstall (delete), plugin options are cleaned up from the database.
 * Language override support with tested language list.
 * Icon size options displayed as percentages (for example 60%, 100%, 200%).
 * Added uninstall cleanup for saved plugin options.
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+Initial stable release.
