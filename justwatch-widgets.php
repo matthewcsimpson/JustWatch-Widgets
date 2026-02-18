@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Plugin Name: JustWatch Widgets Block
- * Plugin URI: https://matthewcsimpson.dev
+ * Plugin Name: JustWatch Widgets
+ * Plugin URI: https://matthewcsimpson.dev/project/justwatch-widgets
  * Description: Gutenberg block for JustWatch widgets + global script + CSS enqueue.
  * Version: 1.0.0
  * Author: Matthew Simpson
@@ -134,58 +134,58 @@ add_action('wp_enqueue_scripts', static function (): void {
   $widget_theme = in_array($widget_theme, ['theme', 'light', 'dark'], true) ? $widget_theme : 'light';
 
   if ($widget_theme === 'theme') {
-    $inline_theme = <<<'JS'
-(() => {
-  const isDarkTheme = () => {
-    const html = document.documentElement;
-    const body = document.body;
-
-    if (html && html.classList.contains('dark')) return true;
-    if (body && body.classList.contains('dark')) return true;
-
-    if (html && html.getAttribute('data-theme') === 'dark') return true;
-    if (body && body.getAttribute('data-theme') === 'dark') return true;
-
-    return false;
-  };
-
-  const applyTheme = () => {
-    const nextTheme = isDarkTheme() ? 'dark' : 'light';
-    const nodes = document.querySelectorAll('[data-jw-widget]');
-    for (let nodeIndex = 0; nodeIndex < nodes.length; nodeIndex += 1) {
-      nodes[nodeIndex].setAttribute('data-theme', nextTheme);
-    }
-  };
-
-  const start = () => {
-    applyTheme();
-
-    try {
-      const observer = new MutationObserver(() => {
-        applyTheme();
-      });
-
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class', 'data-theme']
-      });
-
-      if (document.body) {
-        observer.observe(document.body, {
-          attributes: true,
-          attributeFilter: ['class', 'data-theme']
-        });
-      }
-    } catch (err) {}
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start);
-  } else {
-    start();
-  }
-})();
-JS;
+    $inline_theme = implode("\n", [
+      '(() => {',
+      '  const isDarkTheme = () => {',
+      '    const html = document.documentElement;',
+      '    const body = document.body;',
+      '',
+      '    if (html && html.classList.contains(\'dark\')) return true;',
+      '    if (body && body.classList.contains(\'dark\')) return true;',
+      '',
+      '    if (html && html.getAttribute(\'data-theme\') === \'dark\') return true;',
+      '    if (body && body.getAttribute(\'data-theme\') === \'dark\') return true;',
+      '',
+      '    return false;',
+      '  };',
+      '',
+      '  const applyTheme = () => {',
+      '    const nextTheme = isDarkTheme() ? \'dark\' : \'light\';',
+      '    const nodes = document.querySelectorAll(\'[data-jw-widget]\');',
+      '    for (let nodeIndex = 0; nodeIndex < nodes.length; nodeIndex += 1) {',
+      '      nodes[nodeIndex].setAttribute(\'data-theme\', nextTheme);',
+      '    }',
+      '  };',
+      '',
+      '  const start = () => {',
+      '    applyTheme();',
+      '',
+      '    try {',
+      '      const observer = new MutationObserver(() => {',
+      '        applyTheme();',
+      '      });',
+      '',
+      '      observer.observe(document.documentElement, {',
+      '        attributes: true,',
+      '        attributeFilter: [\'class\', \'data-theme\']',
+      '      });',
+      '',
+      '      if (document.body) {',
+      '        observer.observe(document.body, {',
+      '          attributes: true,',
+      '          attributeFilter: [\'class\', \'data-theme\']',
+      '        });',
+      '      }',
+      '    } catch (err) {}',
+      '  };',
+      '',
+      '  if (document.readyState === \'loading\') {',
+      '    document.addEventListener(\'DOMContentLoaded\', start);',
+      '  } else {',
+      '    start();',
+      '  }',
+      '})();',
+    ]);
 
     wp_add_inline_script('jw-widgets-embed', $inline_theme, 'before');
   }
