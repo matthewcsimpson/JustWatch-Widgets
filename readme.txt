@@ -18,9 +18,23 @@ Features include:
 
 - Global plugin defaults in WordPress admin settings.
 - Per-block overrides in the editor.
-- Language override support.
+- Language override support (tested languages only).
 - Offer label, max offers, icon scale, and message customization.
 - Heading and border display controls.
+
+Tested language override options:
+
+- Arabic
+- Chinese
+- Czech
+- French
+- German
+- Italian
+- Polish
+- Portugese
+- Romanian
+- Russian
+- Spanish
 
 == Installation ==
 
@@ -39,9 +53,15 @@ Yes. Add your API key in the plugin settings page before using the widget.
 
 Yes. Use the Overrides panel in the block inspector.
 
+= What happens when I uninstall the plugin? =
+
+On plugin uninstall (delete), plugin options are cleaned up from the database.
+
 == Changelog ==
 
 = 1.0.0 =
 * First stable release.
 * Admin defaults and block-level overrides.
 * Language override support with tested language list.
+* Icon size options displayed as percentages (for example 60%, 100%, 200%).
+* Added uninstall cleanup for saved plugin options.
