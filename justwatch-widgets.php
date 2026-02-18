@@ -5,7 +5,7 @@
  * Description: Gutenberg block for JustWatch widgets + global script + CSS enqueue.
  * Version: 1.0.0
  * Author: Matthew Simpson
- * Text Domain: jw-widgets
+ * Text Domain: justwatch-widgets
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Tested up to: 6.9.1
