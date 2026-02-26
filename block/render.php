@@ -33,7 +33,7 @@ if (!in_array($jw_widgets_heading_level, ['h2', 'h3', 'h4', 'h5', 'h6', 'p'], tr
 }
 
 $jw_widgets_show_heading = (int) get_option(JW_WIDGETS_OPTION_SHOW_HEADING, 1) === 1;
-$jw_widgets_show_attribution_link = (int) get_option(JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK, 1) === 1;
+$jw_widgets_show_attribution_link = (int) get_option(JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK, 0) === 1;
 
 // Placement
 $jw_widgets_heading_outside_border = (int) get_option(JW_WIDGETS_OPTION_HEADING_OUTSIDE_BORDER, 0) === 1;

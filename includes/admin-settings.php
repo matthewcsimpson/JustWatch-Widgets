@@ -111,7 +111,7 @@ add_action('admin_init', static function (): void {
         'sanitize_callback' => static function ($value): int {
             return $value ? 1 : 0;
         },
-        'default' => 1,
+        'default' => 0,
     ]);
 
     // Override Language (checkbox)
@@ -418,7 +418,7 @@ add_action('admin_init', static function (): void {
         'jw_widgets_show_attribution_link',
         'Public Attribution Link',
         static function (): void {
-            $enabled = (int) get_option(JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK, 1) === 1;
+            $enabled = (int) get_option(JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK, 0) === 1;
     ?>
         <label>
             <input

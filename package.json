@@ -2,6 +2,25 @@
   "name": "cinelink-embeds-for-justwatch",
   "version": "1.0.0",
   "private": true,
+  "files": [
+    "cinelink-embeds-for-justwatch.php",
+    "readme.txt",
+    "README.md",
+    "LICENSE",
+    "uninstall.php",
+    "includes",
+    "block",
+    "assets/justwatch-widget.css",
+    "assets/admin-settings.js",
+    "assets/admin-settings.css",
+    "assets/preview-heading-inside.png",
+    "assets/preview-heading-outside.png",
+    "assets/preview-icon.png",
+    "assets/preview-labels-none.png",
+    "assets/preview-labels-price.png",
+    "assets/preview-labels-type.png",
+    "assets/preview-margins.png"
+  ],
   "devDependencies": {
     "@wordpress/scripts": "^30.0.0"
   },

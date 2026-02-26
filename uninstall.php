@@ -4,7 +4,7 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
     exit;
 }
 
-$options = [
+$jw_widgets_options = [
     'jw_widgets_api_key',
     'jw_widgets_widget_theme',
     'jw_widgets_show_attribution_link',
@@ -31,10 +31,10 @@ $options = [
     'jw_widgets_title_not_found_message',
 ];
 
-foreach ($options as $optionName) {
-    delete_option($optionName);
+foreach ($jw_widgets_options as $jw_widgets_option_name) {
+    delete_option($jw_widgets_option_name);
 
     if (is_multisite()) {
-        delete_site_option($optionName);
+        delete_site_option($jw_widgets_option_name);
     }
 }

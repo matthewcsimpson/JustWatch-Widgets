@@ -23,7 +23,7 @@ Features include:
 - Offer label, max offers, icon scale, and message customization.
 - Heading and border display controls.
 - Configurable wrapper margin globally and per block.
-- Optional public attribution link, enabled by default and can be disabled by admin.
+- Optional public attribution link, disabled by default and can be enabled by admin.
 
 The plugin also inserts the JustWatch code snippet into your site footer globally, which provides backward compatibility if you were previously using HTML code to embed widgets. Once you have the plugin installed, you can delete the code snippet you added to your theme.
 
