@@ -7,6 +7,7 @@
   },
   "scripts": {
     "build": "wp-scripts build block/index.js --output-path=block/build",
-    "start": "wp-scripts start block/index.js --output-path=block/build"
+    "start": "wp-scripts start block/index.js --output-path=block/build",
+    "plugin-zip": "wp-scripts plugin-zip"
   }
 }

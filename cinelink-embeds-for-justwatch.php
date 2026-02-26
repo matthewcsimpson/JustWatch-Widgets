@@ -68,9 +68,16 @@ add_action('init', static function (): void {
         if (!file_exists($render_file)) {
           return '';
         }
+        $buffer_level = ob_get_level();
         ob_start();
-        include $render_file;
-        return (string) ob_get_clean();
+        try {
+          include $render_file;
+          return (string) ob_get_clean();
+        } finally {
+          while (ob_get_level() > $buffer_level) {
+            ob_end_clean();
+          }
+        }
       },
     ]
   );
