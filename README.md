@@ -1,4 +1,4 @@
-# JustWatch Widgets
+# CineLink Embeds for JustWatch
 
 WordPress plugin that adds a Gutenberg block for embedding JustWatch widgets using TMDB or IMDB IDs.
 
@@ -9,6 +9,7 @@ WordPress plugin that adds a Gutenberg block for embedding JustWatch widgets usi
 - Language override (limited to tested languages).
 - Offer label, icon scale, max services, heading, border, and fallback message controls.
 - Configurable wrapper margin as a global default and per-block override.
+- Optional public attribution link, disabled by default and can be enabled by admin.
 - Dynamic server-side render via block `render.php`.
 - Icon scale option labels shown as percentages (for example `60%`, `100%`, `200%`).
 - Uninstall cleanup removes saved plugin options when plugin is deleted.
@@ -38,10 +39,10 @@ The plugin also inserts the JustWatch code snippet into your site footer globall
 
 ## Installation (WordPress)
 
-1. Copy this plugin directory into `wp-content/plugins/justwatch-widgets`.
-2. Activate **JustWatch Widgets** in wp-admin.
-3. Go to **JustWatch Widgets** in admin menu and add your API key.
-4. Insert **JustWatch Widget** block into a post/page.
+1. Copy this plugin directory into `wp-content/plugins/cinelink-embeds-for-justwatch`.
+2. Activate **CineLink Embeds for JustWatch** in wp-admin.
+3. Go to **CineLink Embeds for JustWatch** in admin menu and add your API key.
+4. Insert **CineLink Embed for JustWatch** block into a post/page.
 
 ## Usage
 
@@ -81,9 +82,9 @@ Service documentation and policies:
 
 ![Global plugin settings in wp-admin](assets/screenshot-1.png)
 
-2. JustWatch Widget block controls in the editor.
+2. CineLink Embed for JustWatch block controls in the editor.
 
-![JustWatch Widget block controls in the editor](assets/screenshot-2.png)
+![CineLink Embed for JustWatch block controls in the editor](assets/screenshot-2.png)
 
 3. Block options with overrides disabled.
 
@@ -100,8 +101,8 @@ Service documentation and policies:
 ## Project Structure
 
 ```text
-justwatch-widgets/
-├─ justwatch-widgets.php
+cinelink-embeds-for-justwatch/
+├─ cinelink-embeds-for-justwatch.php
 ├─ includes/
 │  └─ admin-settings.php
 ├─ block/

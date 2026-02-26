@@ -1,13 +1,13 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "jw/widgets",
   "version": "1.0.0",
-  "title": "JustWatch Widget",
+  "title": "CineLink Embed for JustWatch",
   "category": "embed",
   "icon": "video-alt3",
-  "description": "Embed a JustWatch widget using TMDB or IMDB id.",
-  "textdomain": "justwatch-widgets",
+  "description": "Embed a JustWatch widget using TMDB or IMDB ID.",
+  "textdomain": "cinelink-embeds-for-justwatch",
   "attributes": {
     "objectType": { "type": "string", "default": "movie" },
     "idType": { "type": "string", "default": "imdb" },

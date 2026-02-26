@@ -31,7 +31,7 @@ if (!function_exists('jw_widgets_sanitize_margin_side_value')) {
 }
 
 /**
- * Settings page + options registration for JustWatch Widgets.
+ * Settings page + options registration for CineLink Embeds for JustWatch.
  * No widget preview.
  * Icon Size includes a visual-only preview (no explanatory text, no px readout).
  *
@@ -40,13 +40,38 @@ if (!function_exists('jw_widgets_sanitize_margin_side_value')) {
 
 add_action('admin_menu', static function (): void {
     add_menu_page(
-        'JustWatch Widgets',
-        'JustWatch Widgets',
+        'CineLink Embeds for JustWatch',
+        'CineLink Embeds',
         'manage_options',
         'jw-widgets',
         'jw_widgets_render_settings_page',
         'dashicons-video-alt3',
         81
+    );
+});
+
+add_action('admin_enqueue_scripts', static function (string $hook): void {
+    if ($hook !== 'toplevel_page_jw-widgets') {
+        return;
+    }
+
+    $script_path = dirname(__DIR__) . '/assets/admin-settings.js';
+    $script_ver = file_exists($script_path) ? (string) filemtime($script_path) : '1.0.0';
+    wp_enqueue_script(
+        'jw-widgets-admin-settings',
+        plugins_url('../assets/admin-settings.js', __FILE__),
+        [],
+        $script_ver,
+        true
+    );
+
+    $style_path = dirname(__DIR__) . '/assets/admin-settings.css';
+    $style_ver = file_exists($style_path) ? (string) filemtime($style_path) : '1.0.0';
+    wp_enqueue_style(
+        'jw-widgets-admin-settings',
+        plugins_url('../assets/admin-settings.css', __FILE__),
+        [],
+        $style_ver
     );
 });
 
@@ -67,7 +92,7 @@ add_action('admin_init', static function (): void {
 
     /**
      * Widget theme:
-     * - theme: match site theme via inline script in justwatch-widgets.php
+     * - theme: match site theme via inline script in cinelink-embeds-for-justwatch.php
      * - light / dark: force
      * Default: light
      */
@@ -79,6 +104,14 @@ add_action('admin_init', static function (): void {
             return in_array($value, ['theme', 'light', 'dark'], true) ? $value : 'light';
         },
         'default' => 'light',
+    ]);
+
+    register_setting('jw_widgets_settings', JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK, [
+        'type' => 'boolean',
+        'sanitize_callback' => static function ($value): int {
+            return $value ? 1 : 0;
+        },
+        'default' => 0,
     ]);
 
     // Override Language (checkbox)
@@ -382,6 +415,28 @@ add_action('admin_init', static function (): void {
     );
 
     add_settings_field(
+        'jw_widgets_show_attribution_link',
+        'Public Attribution Link',
+        static function (): void {
+            $enabled = (int) get_option(JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK, 0) === 1;
+    ?>
+        <label>
+            <input
+                id="jw_widgets_show_attribution_link"
+                type="checkbox"
+                name="<?php echo esc_attr(JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK); ?>"
+                value="1"
+                <?php checked(true, $enabled); ?> />
+            Show the “Streaming offers, powered by JustWatch” external link on public pages. <em>This is an option, but note that JustWatch requires it be enabled.</em>
+        </label>
+    <?php
+        },
+        'jw-widgets',
+        'jw_widgets_behavior',
+        ['label_for' => 'jw_widgets_show_attribution_link']
+    );
+
+    add_settings_field(
         'jw_widgets_language',
         'Override Language',
         static function (): void {
@@ -424,27 +479,6 @@ add_action('admin_init', static function (): void {
                 <?php endforeach; ?>
             </select>
         </label>
-
-        <script>
-            (() => {
-                if (typeof window.jwWidgetsBindToggle !== 'function') {
-                    window.jwWidgetsBindToggle = (toggleId, targetId) => {
-                        const toggleElement = document.getElementById(toggleId);
-                        const targetElement = document.getElementById(targetId);
-                        if (!toggleElement || !targetElement) return;
-
-                        const sync = () => {
-                            targetElement.disabled = !toggleElement.checked;
-                        };
-
-                        toggleElement.addEventListener('change', sync);
-                        sync();
-                    };
-                };
-
-                window.jwWidgetsBindToggle('jw_widgets_language_override_enabled', 'jw_widgets_language');
-            })();
-        </script>
     <?php
         },
         'jw-widgets',
@@ -478,45 +512,6 @@ add_action('admin_init', static function (): void {
                     alt="" />
             </div>
         </div>
-
-        <script>
-            (() => {
-                const selectElement = document.getElementById('jw_widgets_offer_label');
-                const previewImageElement = document.getElementById('jw_widgets_offer_label_preview');
-                if (!selectElement || !previewImageElement) return;
-
-                const syncPreview = () => {
-                    if (selectElement.value === 'price') {
-                        previewImageElement.src = previewImageElement.dataset.previewPrice;
-                        return;
-                    }
-
-                    if (selectElement.value === 'none') {
-                        previewImageElement.src = previewImageElement.dataset.previewNone;
-                        return;
-                    }
-
-                    previewImageElement.src = previewImageElement.dataset.previewType;
-                };
-
-                selectElement.addEventListener('change', syncPreview);
-                syncPreview();
-            })();
-        </script>
-
-        <style>
-            .jw-offer-label-preview {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .jw-offer-label-preview__img {
-                width: 150px;
-                height: auto;
-                display: block;
-            }
-        </style>
     <?php
         },
         'jw-widgets',
@@ -551,13 +546,6 @@ add_action('admin_init', static function (): void {
                 </option>
             <?php endfor; ?>
         </select>
-
-        <script>
-            (() => {
-                if (typeof window.jwWidgetsBindToggle !== 'function') return;
-                window.jwWidgetsBindToggle('jw_widgets_max_offers_enabled', 'jw_widgets_max_offers');
-            })();
-        </script>
     <?php
         },
         'jw-widgets',
@@ -586,61 +574,6 @@ add_action('admin_init', static function (): void {
                 <img class="jw-icon-preview__img" src="<?php echo esc_url($icon_preview_url); ?>" alt="" />
             </div>
         </div>
-
-        <script>
-            (() => {
-                const selectElement = document.getElementById('jw_widgets_scale');
-                const previewElement = document.getElementById('jw_icon_preview');
-                if (!selectElement || !previewElement) return;
-
-                const baseFontSizePx = 11.56;
-
-                const update = () => {
-                    let scale = parseFloat(selectElement.value || '1.0');
-                    if (!Number.isFinite(scale) || scale <= 0) scale = 1.0;
-                    previewElement.style.fontSize = (baseFontSizePx * scale) + 'px';
-                };
-
-                selectElement.addEventListener('change', update);
-                update();
-            })();
-        </script>
-
-        <style>
-            .jw-inline-flex {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .jw-inline-flex-wrap {
-                display: flex;
-                align-items: center;
-                gap: 14px;
-                flex-wrap: wrap;
-            }
-
-            .jw-inline-offset {
-                margin-left: 8px;
-            }
-
-            .jw-icon-preview {
-                display: inline-flex;
-                align-items: center;
-                padding: 6px 10px;
-                border: 1px solid #dcdcdc;
-                border-radius: 6px;
-                background: #fff;
-            }
-
-            .jw-icon-preview__img {
-                border: 1px solid transparent;
-                border-radius: 1.1em;
-                width: 4.5em;
-                height: auto;
-                display: block;
-            }
-        </style>
     <?php
         },
         'jw-widgets',
@@ -672,13 +605,6 @@ add_action('admin_init', static function (): void {
                 value="<?php echo esc_attr($borderColour); ?>"
                 <?php echo $enabled ? '' : 'disabled'; ?> />
         </label>
-
-        <script>
-            (() => {
-                if (typeof window.jwWidgetsBindToggle !== 'function') return;
-                window.jwWidgetsBindToggle('jw_widgets_border_enabled', 'jw_widgets_border_colour');
-            })();
-        </script>
     <?php
         },
         'jw-widgets',
@@ -734,54 +660,6 @@ add_action('admin_init', static function (): void {
         </div>
 
         <p class="description" style="margin: 8px 0 0;">Each side supports a single CSS value (for example: 16px, 1rem, 5%, auto, 0).</p>
-
-        <style>
-            .jw-margin-grid {
-                display: grid;
-                grid-template-columns: 110px 150px 110px;
-                grid-template-rows: auto auto auto;
-                gap: 10px;
-                align-items: center;
-            }
-
-            .jw-margin-grid__input {
-                width: 100px;
-            }
-
-            .jw-margin-grid__top {
-                grid-column: 2;
-                grid-row: 1;
-                justify-self: center;
-            }
-
-            .jw-margin-grid__right {
-                grid-column: 3;
-                grid-row: 2;
-            }
-
-            .jw-margin-grid__bottom {
-                grid-column: 2;
-                grid-row: 3;
-                justify-self: center;
-            }
-
-            .jw-margin-grid__left {
-                grid-column: 1;
-                grid-row: 2;
-            }
-
-            .jw-margin-grid__center {
-                grid-column: 2;
-                grid-row: 2;
-                margin: 0 auto;
-            }
-
-            .jw-margin-grid__preview {
-                width: 150px;
-                height: auto;
-                display: block;
-            }
-        </style>
     <?php
         },
         'jw-widgets',
@@ -814,13 +692,6 @@ add_action('admin_init', static function (): void {
                 value="<?php echo esc_attr($pickerColour); ?>"
                 <?php echo $enabled ? '' : 'disabled'; ?> />
         </label>
-
-        <script>
-            (() => {
-                if (typeof window.jwWidgetsBindToggle !== 'function') return;
-                window.jwWidgetsBindToggle('jw_widgets_label_colour_override_enabled', 'jw_widgets_label_colour');
-            })();
-        </script>
     <?php
         },
         'jw-widgets',
@@ -842,39 +713,6 @@ add_action('admin_init', static function (): void {
                 <?php checked(true, $enabled); ?> />
             Enable
         </label>
-
-        <script>
-            (() => {
-                const toggleElement = document.getElementById('jw_widgets_show_heading');
-                if (!toggleElement) return;
-
-                const headingFieldIds = [
-                    'jw_widgets_heading_text',
-                    'jw_widgets_heading_level',
-                    'jw_widgets_heading_outside_border',
-                ];
-
-                const resolveRow = (fieldId) => {
-                    const labelElement = document.querySelector(`label[for="${fieldId}"]`);
-                    if (labelElement && labelElement.closest('tr')) return labelElement.closest('tr');
-
-                    const fieldElement = document.getElementById(fieldId);
-                    if (!fieldElement) return null;
-                    return fieldElement.closest('tr');
-                };
-
-                const toggleRows = () => {
-                    headingFieldIds.forEach((fieldId) => {
-                        const rowElement = resolveRow(fieldId);
-                        if (!rowElement) return;
-                        rowElement.style.display = toggleElement.checked ? '' : 'none';
-                    });
-                };
-
-                toggleElement.addEventListener('change', toggleRows);
-                toggleRows();
-            })();
-        </script>
     <?php
         },
         'jw-widgets',
@@ -894,20 +732,7 @@ add_action('admin_init', static function (): void {
             class="regular-text"
             name="<?php echo esc_attr(JW_WIDGETS_OPTION_HEADING_TEXT); ?>"
             value="<?php echo esc_attr($value); ?>" />
-
-        <script>
-            (() => {
-                const label = document.querySelector('label[for="jw_widgets_heading_text"]');
-                if (!label) return;
-                if (label.nextElementSibling && label.nextElementSibling.classList.contains('jw-plain-text-note')) return;
-
-                const note = document.createElement('p');
-                note.className = 'description jw-plain-text-note';
-                note.style.margin = '4px 0 0';
-                note.textContent = 'Plain text only.';
-                label.insertAdjacentElement('afterend', note);
-            })();
-        </script>
+        <p class="description jw-note">Plain text only.</p>
     <?php
         },
         'jw-widgets',
@@ -931,20 +756,7 @@ add_action('admin_init', static function (): void {
             <option value="h6" <?php selected('h6', $value); ?>>H6</option>
             <option value="p" <?php selected('p',  $value); ?>>P</option>
         </select>
-
-        <script>
-            (() => {
-                const label = document.querySelector('label[for="jw_widgets_heading_level"]');
-                if (!label) return;
-                if (label.nextElementSibling && label.nextElementSibling.classList.contains('jw-theme-inherit-note')) return;
-
-                const note = document.createElement('p');
-                note.className = 'description jw-theme-inherit-note';
-                note.style.margin = '4px 0 0';
-                note.textContent = 'Will inherit theme styles.';
-                label.insertAdjacentElement('afterend', note);
-            })();
-        </script>
+        <p class="description jw-note">Will inherit theme styles.</p>
     <?php
         },
         'jw-widgets',
@@ -978,38 +790,6 @@ add_action('admin_init', static function (): void {
                     alt="" />
             </div>
         </div>
-
-        <script>
-            (() => {
-                const selectElement = document.getElementById('jw_widgets_heading_outside_border');
-                const previewImageElement = document.getElementById('jw_widgets_heading_position_preview');
-                if (!selectElement || !previewImageElement) return;
-
-                const syncPreview = () => {
-                    const isOutside = selectElement.value === '1';
-                    previewImageElement.src = isOutside ?
-                        previewImageElement.dataset.previewOutside :
-                        previewImageElement.dataset.previewInside;
-                };
-
-                selectElement.addEventListener('change', syncPreview);
-                syncPreview();
-            })();
-        </script>
-
-        <style>
-            .jw-heading-preview {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .jw-heading-preview__img {
-                width: 150px;
-                height: auto;
-                display: block;
-            }
-        </style>
     <?php
         },
         'jw-widgets',
@@ -1028,23 +808,7 @@ add_action('admin_init', static function (): void {
             class="large-text"
             rows="3"
             name="<?php echo esc_attr(JW_WIDGETS_OPTION_NO_OFFERS_MESSAGE); ?>"><?php echo esc_textarea($value); ?></textarea>
-
-        <script>
-            (() => {
-                const label = document.querySelector('label[for="jw_widgets_no_offers_message"]');
-                if (!label) return;
-                if (label.nextElementSibling && label.nextElementSibling.classList.contains('jw-title-note')) return;
-
-                const note = document.createElement('p');
-                note.className = 'description jw-title-note';
-                note.style.margin = '4px 0 0';
-                note.append('Supports ');
-                const code = document.createElement('code');
-                code.textContent = '{{title}}';
-                note.append(code, '.');
-                label.insertAdjacentElement('afterend', note);
-            })();
-        </script>
+        <p class="description jw-note">Supports <code>{{title}}</code>.</p>
     <?php
         },
         'jw-widgets',
@@ -1063,20 +827,7 @@ add_action('admin_init', static function (): void {
             class="large-text"
             rows="3"
             name="<?php echo esc_attr(JW_WIDGETS_OPTION_TITLE_NOT_FOUND_MESSAGE); ?>"><?php echo esc_textarea($value); ?></textarea>
-
-        <script>
-            (() => {
-                const label = document.querySelector('label[for="jw_widgets_title_not_found_message"]');
-                if (!label) return;
-                if (label.nextElementSibling && label.nextElementSibling.classList.contains('jw-plain-text-note')) return;
-
-                const note = document.createElement('p');
-                note.className = 'description jw-plain-text-note';
-                note.style.margin = '4px 0 0';
-                note.textContent = 'Plain text only.';
-                label.insertAdjacentElement('afterend', note);
-            })();
-        </script>
+        <p class="description jw-note">Plain text only.</p>
     <?php
         },
         'jw-widgets',
@@ -1089,7 +840,7 @@ function jw_widgets_render_settings_page(): void {
     if (!current_user_can('manage_options')) return;
     ?>
     <div class="wrap">
-        <h1>JustWatch Widgets</h1>
+        <h1>CineLink Embeds for JustWatch</h1>
 
         <form method="post" action="options.php">
             <?php
