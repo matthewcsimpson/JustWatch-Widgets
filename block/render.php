@@ -33,6 +33,7 @@ if (!in_array($jw_widgets_heading_level, ['h2', 'h3', 'h4', 'h5', 'h6', 'p'], tr
 }
 
 $jw_widgets_show_heading = (int) get_option(JW_WIDGETS_OPTION_SHOW_HEADING, 1) === 1;
+$jw_widgets_show_attribution_link = (int) get_option(JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK, 1) === 1;
 
 // Placement
 $jw_widgets_heading_outside_border = (int) get_option(JW_WIDGETS_OPTION_HEADING_OUTSIDE_BORDER, 0) === 1;
@@ -370,17 +371,19 @@ $jw_widgets_allowed_heading_tags = [
             <?php if ($jw_widgets_max_offers_enabled) : ?>data-max-offers="<?php echo esc_attr((string) $jw_widgets_max_offers_int); ?>" <?php endif; ?>
             <?php if ($jw_widgets_lang_enabled) : ?>data-language="<?php echo esc_attr($jw_widgets_lang); ?>" <?php endif; ?>></div>
 
-        <div class="jw-widgets__linkcontainer">
-            <a
-                class="jw-widgets__link"
-                style="<?php echo esc_attr($jw_widgets_link_style); ?>"
-                target="_blank"
-                data-original="https://www.justwatch.com/ca"
-                href="https://www.justwatch.com"
-                rel="noopener">
-                Streaming offers, powered by
-                <span class="jw-widgets__logo">JustWatch</span>
-            </a>
-        </div>
+        <?php if ($jw_widgets_show_attribution_link) : ?>
+            <div class="jw-widgets__linkcontainer">
+                <a
+                    class="jw-widgets__link"
+                    style="<?php echo esc_attr($jw_widgets_link_style); ?>"
+                    target="_blank"
+                    data-original="https://www.justwatch.com/ca"
+                    href="https://www.justwatch.com"
+                    rel="noopener">
+                    Streaming offers, powered by
+                    <span class="jw-widgets__logo">JustWatch</span>
+                </a>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

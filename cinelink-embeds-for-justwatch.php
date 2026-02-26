@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Plugin Name: JustWatch Widgets
- * Plugin URI: https://matthewcsimpson.dev/project/justwatch-widgets
- * Description: Gutenberg block for JustWatch widgets + global script + CSS enqueue.
+ * Plugin Name: CineLink Embeds for JustWatch
+ * Plugin URI: https://matthewcsimpson.dev/project/cinelink-embeds-for-justwatch
+ * Description: Gutenberg block for embedding JustWatch widgets + global script + CSS enqueue.
  * Version: 1.0.0
  * Author: Matthew Simpson
  * Author URI: https://matthewcsimpson.dev
- * Text Domain: justwatch-widgets
+ * Text Domain: cinelink-embeds-for-justwatch
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Tested up to: 6.9
@@ -26,6 +26,7 @@ define('JW_WIDGETS_PLUGIN_URL', plugin_dir_url(__FILE__));
 if (!defined('JW_WIDGETS_OPTION_KEY')) define('JW_WIDGETS_OPTION_KEY', 'jw_widgets_api_key');
 
 if (!defined('JW_WIDGETS_OPTION_WIDGET_THEME')) define('JW_WIDGETS_OPTION_WIDGET_THEME', 'jw_widgets_widget_theme');
+if (!defined('JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK')) define('JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK', 'jw_widgets_show_attribution_link');
 
 if (!defined('JW_WIDGETS_OPTION_LANGUAGE_OVERRIDE_ENABLED')) define('JW_WIDGETS_OPTION_LANGUAGE_OVERRIDE_ENABLED', 'jw_widgets_language_override_enabled');
 if (!defined('JW_WIDGETS_OPTION_LANGUAGE')) define('JW_WIDGETS_OPTION_LANGUAGE', 'jw_widgets_language');

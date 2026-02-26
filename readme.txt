@@ -1,4 +1,4 @@
-=== JustWatch Widgets ===
+=== CineLink Embeds for JustWatch ===
 Contributors: matthewcsimpson
 Donate link: https://ko-fi.com/matthewsimpson
 Tags: justwatch, streaming, movies, tv, gutenberg
@@ -13,7 +13,7 @@ Embed JustWatch streaming availability widgets in the block editor with global d
 
 == Description ==
 
-JustWatch Widgets adds a Gutenberg block for embedding JustWatch widgets using TMDB or IMDB IDs.
+CineLink Embeds for JustWatch adds a Gutenberg block for embedding JustWatch widgets using TMDB or IMDB IDs.
 
 Features include:
 
@@ -23,6 +23,7 @@ Features include:
 - Offer label, max offers, icon scale, and message customization.
 - Heading and border display controls.
 - Configurable wrapper margin globally and per block.
+- Optional public attribution link, enabled by default and can be disabled by admin.
 
 The plugin also inserts the JustWatch code snippet into your site footer globally, which provides backward compatibility if you were previously using HTML code to embed widgets. Once you have the plugin installed, you can delete the code snippet you added to your theme.
 
@@ -69,8 +70,8 @@ Service documentation and policies:
 
 1. Upload the plugin folder to the `/wp-content/plugins/` directory, or install it as a ZIP via Plugins > Add New.
 2. Activate the plugin through the Plugins menu in WordPress.
-3. Open JustWatch Widgets settings in wp-admin and add your API key.
-4. Insert the JustWatch Widget block into a post or page and configure ID type + ID.
+3. Open CineLink Embeds for JustWatch settings in wp-admin and add your API key.
+4. Insert the CineLink Embed for JustWatch block into a post or page and configure ID type + ID.
 
 == Frequently Asked Questions ==
 
@@ -89,7 +90,7 @@ On plugin uninstall (delete), plugin options are cleaned up from the database.
 == Screenshots ==
 
 1. Global plugin settings in wp-admin.
-2. JustWatch Widget block controls in the editor.
+2. CineLink Embed for JustWatch block controls in the editor.
 3. Block options with overrides disabled
 4. Block options with overrides enabled
 5. The widget rendered several different times. This does not represent all of the available customizations, just a taste of what's possible.

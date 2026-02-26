@@ -31,7 +31,7 @@ if (!function_exists('jw_widgets_sanitize_margin_side_value')) {
 }
 
 /**
- * Settings page + options registration for JustWatch Widgets.
+ * Settings page + options registration for CineLink Embeds for JustWatch.
  * No widget preview.
  * Icon Size includes a visual-only preview (no explanatory text, no px readout).
  *
@@ -40,8 +40,8 @@ if (!function_exists('jw_widgets_sanitize_margin_side_value')) {
 
 add_action('admin_menu', static function (): void {
     add_menu_page(
-        'JustWatch Widgets',
-        'JustWatch Widgets',
+        'CineLink Embeds for JustWatch',
+        'CineLink Embeds',
         'manage_options',
         'jw-widgets',
         'jw_widgets_render_settings_page',
@@ -67,7 +67,7 @@ add_action('admin_init', static function (): void {
 
     /**
      * Widget theme:
-     * - theme: match site theme via inline script in justwatch-widgets.php
+        * - theme: match site theme via inline script in cinelink-embeds-for-justwatch.php
      * - light / dark: force
      * Default: light
      */
@@ -79,6 +79,14 @@ add_action('admin_init', static function (): void {
             return in_array($value, ['theme', 'light', 'dark'], true) ? $value : 'light';
         },
         'default' => 'light',
+    ]);
+
+    register_setting('jw_widgets_settings', JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK, [
+        'type' => 'boolean',
+        'sanitize_callback' => static function ($value): int {
+            return $value ? 1 : 0;
+        },
+        'default' => 1,
     ]);
 
     // Override Language (checkbox)
@@ -379,6 +387,28 @@ add_action('admin_init', static function (): void {
         },
         'jw-widgets',
         'jw_widgets_behavior'
+    );
+
+    add_settings_field(
+        'jw_widgets_show_attribution_link',
+        'Public Attribution Link',
+        static function (): void {
+            $enabled = (int) get_option(JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK, 1) === 1;
+    ?>
+        <label>
+            <input
+                id="jw_widgets_show_attribution_link"
+                type="checkbox"
+                name="<?php echo esc_attr(JW_WIDGETS_OPTION_SHOW_ATTRIBUTION_LINK); ?>"
+                value="1"
+                <?php checked(true, $enabled); ?> />
+            Show the “Streaming offers, powered by JustWatch” external link on public pages. <em>This is an option, but note that JustWatch requires it be enabled.</em>
+        </label>
+    <?php
+        },
+        'jw-widgets',
+        'jw_widgets_behavior',
+        ['label_for' => 'jw_widgets_show_attribution_link']
     );
 
     add_settings_field(
@@ -1089,7 +1119,7 @@ function jw_widgets_render_settings_page(): void {
     if (!current_user_can('manage_options')) return;
     ?>
     <div class="wrap">
-        <h1>JustWatch Widgets</h1>
+        <h1>CineLink Embeds for JustWatch</h1>
 
         <form method="post" action="options.php">
             <?php

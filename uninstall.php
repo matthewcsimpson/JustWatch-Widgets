@@ -7,6 +7,7 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 $options = [
     'jw_widgets_api_key',
     'jw_widgets_widget_theme',
+    'jw_widgets_show_attribution_link',
     'jw_widgets_language_override_enabled',
     'jw_widgets_language',
     'jw_widgets_offer_label',

@@ -391,7 +391,7 @@ const Edit = ({ attributes, setAttributes }) => {
   return (
     <Fragment>
       <InspectorControls>
-        <PanelBody title="JustWatch Widget" initialOpen={true}>
+        <PanelBody title="CineLink Embed for JustWatch" initialOpen={true}>
           {controls}
         </PanelBody>
 
@@ -408,7 +408,7 @@ const Edit = ({ attributes, setAttributes }) => {
             borderRadius: "4px",
           }}
         >
-          <strong>JustWatch Widget</strong>
+          <strong>CineLink Embed for JustWatch</strong>
 
           <div style={{ marginTop: 12 }}>{controls}</div>
 
