@@ -1,5 +1,5 @@
 === CineLink Embeds for JustWatch ===
-Contributors: matthewcsimpson
+Contributors: posterboy81, matthewcsimpson
 Donate link: https://ko-fi.com/matthewsimpson
 Tags: justwatch, streaming, movies, tv, gutenberg
 Requires at least: 6.0
