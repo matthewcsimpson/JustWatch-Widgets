@@ -88,11 +88,11 @@ Yes. Use the Overrides panel in the block inspector.
 
 Yes. Use the `[cinelink]` shortcode in your page builder's code or text module:
 
-With IMDB:
+Movie, with IMDB:
 `[cinelink object_type="movie" id_type="imdb" external_id="tt31190636"]`
 
-With TMDB:
-`[cinelink object_type="movie" id_type="tmdb" external_id="12345"]`
+TV Show, with TMDB:
+`[cinelink object_type="show" id_type="tmdb" external_id="245927"]`
 
 The three required attributes are `object_type` (movie or show), `id_type` (tmdb or imdb), and `external_id` (the title's ID). All other display settings (heading, border, colours, language, etc.) are inherited from the plugin's global settings page.
 
