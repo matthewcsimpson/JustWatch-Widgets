@@ -59,28 +59,46 @@ if (!defined('JW_WIDGETS_OPTION_TITLE_NOT_FOUND_MESSAGE')) define('JW_WIDGETS_OP
 
 require_once JW_WIDGETS_PLUGIN_DIR . 'includes/admin-settings.php';
 
+function jw_widgets_render_block(array $attributes): string {
+  $render_file = JW_WIDGETS_PLUGIN_DIR . 'block/render.php';
+  if (!file_exists($render_file)) {
+    return '';
+  }
+  $buffer_level = ob_get_level();
+  ob_start();
+  try {
+    include $render_file;
+    return (string) ob_get_clean();
+  } finally {
+    while (ob_get_level() > $buffer_level) {
+      ob_end_clean();
+    }
+  }
+}
+
 add_action('init', static function (): void {
   register_block_type(
     JW_WIDGETS_PLUGIN_DIR . 'block',
-    [
-      'render_callback' => static function (array $attributes): string {
-        $render_file = JW_WIDGETS_PLUGIN_DIR . 'block/render.php';
-        if (!file_exists($render_file)) {
-          return '';
-        }
-        $buffer_level = ob_get_level();
-        ob_start();
-        try {
-          include $render_file;
-          return (string) ob_get_clean();
-        } finally {
-          while (ob_get_level() > $buffer_level) {
-            ob_end_clean();
-          }
-        }
-      },
-    ]
+    ['render_callback' => 'jw_widgets_render_block']
   );
+
+  add_shortcode('cinelink', static function ($atts): string {
+    $atts = shortcode_atts(
+      [
+        'object_type' => 'movie',
+        'id_type'     => 'imdb',
+        'external_id' => '',
+      ],
+      $atts,
+      'cinelink'
+    );
+
+    return jw_widgets_render_block([
+      'objectType' => $atts['object_type'],
+      'idType'     => $atts['id_type'],
+      'externalId' => $atts['external_id'],
+    ]);
+  });
 });
 
 add_action('enqueue_block_editor_assets', static function (): void {

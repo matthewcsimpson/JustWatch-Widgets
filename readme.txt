@@ -19,6 +19,7 @@ Features include:
 
 - Global plugin defaults in WordPress admin settings.
 - Per-block overrides in the editor.
+- Shortcode support for use with Divi, Elementor, and other page builders.
 - Language override support (tested languages only).
 - Offer label, max offers, icon scale, and message customization.
 - Heading and border display controls.
@@ -83,6 +84,18 @@ Yes. Add your API key in the plugin settings page before using the widget.
 
 Yes. Use the Overrides panel in the block inspector.
 
+= Does this plugin work with Divi, Elementor, or other page builders? =
+
+Yes. Use the `[cinelink]` shortcode in your page builder's code or text module:
+
+With IMDB:
+`[cinelink object_type="movie" id_type="imdb" external_id="tt31190636"]`
+
+With TMDB:
+`[cinelink object_type="movie" id_type="tmdb" external_id="12345"]`
+
+The three required attributes are `object_type` (movie or show), `id_type` (tmdb or imdb), and `external_id` (the title's ID). All other display settings (heading, border, colours, language, etc.) are inherited from the plugin's global settings page.
+
 = What happens when I uninstall the plugin? =
 
 On plugin uninstall (delete), plugin options are cleaned up from the database.
@@ -96,6 +109,9 @@ On plugin uninstall (delete), plugin options are cleaned up from the database.
 5. The widget rendered several different times. This does not represent all of the available customizations, just a taste of what's possible.
 
 == Changelog ==
+
+= 1.0.2 =
+* Add shortcode support for use with Divi, Elementor, and other page builders.
 
 = 1.0.1 =
 * Add custom admin footer on settings page.
