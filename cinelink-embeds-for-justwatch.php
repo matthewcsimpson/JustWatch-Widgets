@@ -4,7 +4,7 @@
  * Plugin Name: CineLink Embeds for JustWatch
  * Plugin URI: https://matthewcsimpson.dev/project/cinelink-embeds-for-justwatch
  * Description: Gutenberg block for embedding JustWatch widgets + global script + CSS enqueue.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Matthew Simpson
  * Author URI: https://matthewcsimpson.dev
  * Text Domain: cinelink-embeds-for-justwatch
